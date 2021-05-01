@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">HardLogin</string>
+    <string name="hint_email_user">Digite e-mail do usuário</string>
+    <string name="hint_password">Digite a senha</string>
+    <string name="login">Login</string>
+    <string name="msg_login_success">Login realizado com sucesso.</string>
+    <string name="msg_login_error">Erro ao realizar login.</string>
+</resources>
