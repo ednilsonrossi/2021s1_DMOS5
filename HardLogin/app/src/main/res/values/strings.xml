@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HardLogin</string>
+    <string name="app_name">Login</string>
     <string name="hint_email_user">Digite e-mail do usuário</string>
     <string name="hint_password">Digite a senha</string>
     <string name="login">Login</string>

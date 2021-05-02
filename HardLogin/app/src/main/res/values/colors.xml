@@ -7,4 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="backgroud_app">#C5D8E8</color>
+    <color name="backgroud_button">#AA00FF</color>
+    <color name="message">#6A1B9A</color>
 </resources>
