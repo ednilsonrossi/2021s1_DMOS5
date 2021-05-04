@@ -1,8 +1,10 @@
-it lopackage br.edu.ifsp.arq.domos5_2021.medias_dmo;
+package br.edu.ifsp.arq.domos5_2021.medias_dmo.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import br.edu.ifsp.arq.domos5_2021.medias_dmo.R;
 
 public class MainActivity extends AppCompatActivity {
 
