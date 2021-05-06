@@ -1,6 +1,7 @@
 package br.edu.ifsp.arq.domos5_2021.hardlogin.view;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,18 +10,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import br.edu.ifsp.arq.domos5_2021.hardlogin.R;
 import br.edu.ifsp.arq.domos5_2021.hardlogin.constantes.Constantes;
-import br.edu.ifsp.arq.domos5_2021.hardlogin.controller.LoginController;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
+    private TextView mChangeBackgroundView;
+    private ConstraintLayout mConstraintLayout;
     private EditText mUserEditText;
     private EditText mPasswordEditText;
     private Button mLoginButton;
     private CheckBox mSaveLoginCheckBox;
+    private boolean mBlueBackgroud;
 
     //Referências para objetos de preferências do usuário
     private SharedPreferences mSharedPreferences;
@@ -31,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         //Recuperando referencias do layout
+        mChangeBackgroundView = findViewById(R.id.view_backgound_change);
+        mConstraintLayout = findViewById(R.id.constraint_layout);
         mUserEditText = findViewById(R.id.edit_user);
         mPasswordEditText = findViewById(R.id.edit_password);
         mLoginButton = findViewById(R.id.button_login);
@@ -38,11 +43,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //Configurando listener
         mLoginButton.setOnClickListener(this);
+        mChangeBackgroundView.setOnClickListener(this);
 
         //Instanciar as predferências de modo privado, ou seja, somente acessível ao app;
         mSharedPreferences = this.getPreferences(MODE_PRIVATE);
-
+        //Verificar se o usuário já salvou suas preferências
         checkPreferences();
+
+        updateUI();
     }
 
 
@@ -51,7 +59,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         if(view == mLoginButton){
             login();
+        }else if(view == mChangeBackgroundView){
+            changeBackground();
         }
+
     }
 
     private void login(){
@@ -80,7 +91,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void checkPreferences(){
         String usuario = mSharedPreferences.getString(Constantes.KEY_USERNAME, "");
         int senha = mSharedPreferences.getInt(Constantes.KEY_PASSWORD, -1);
-        boolean lembrar = mSharedPreferences.getBoolean(Constantes.KEY_SAVE_PREPERENCES, false);
+        boolean lembrar = mSharedPreferences.getBoolean(Constantes.KEY_SAVE_PREFERENCES, false);
+        mBlueBackgroud = mSharedPreferences.getBoolean(Constantes.KEY_DEFAULT_BACKGROUND, true);
         if(lembrar){
             mUserEditText.setText(usuario);
             mPasswordEditText.setText(String.format("%d", senha));
@@ -93,12 +105,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(mSaveLoginCheckBox.isChecked()){
             editor.putString(Constantes.KEY_USERNAME, username)
                     .putInt(Constantes.KEY_PASSWORD, password)
-                    .putBoolean(Constantes.KEY_SAVE_PREPERENCES, true);
+                    .putBoolean(Constantes.KEY_SAVE_PREFERENCES, true)
+                    .putBoolean(Constantes.KEY_DEFAULT_BACKGROUND, mBlueBackgroud);
         }else{
             editor.putString(Constantes.KEY_USERNAME, "")
                     .putInt(Constantes.KEY_PASSWORD, -1)
-                    .putBoolean(Constantes.KEY_SAVE_PREPERENCES, false);
+                    .putBoolean(Constantes.KEY_SAVE_PREFERENCES, false)
+                    .putBoolean(Constantes.KEY_DEFAULT_BACKGROUND, mBlueBackgroud);
         }
         editor.commit();
+    }
+
+    private void changeBackground(){
+        mBlueBackgroud = !mBlueBackgroud;
+        savePreferences("", -1);
+        updateUI();
+    }
+
+    private void updateUI(){
+        if(!mBlueBackgroud){
+            mConstraintLayout.setBackgroundColor(getColor(R.color.black));
+            mSaveLoginCheckBox.setTextColor(getColor(R.color.white));
+            mChangeBackgroundView.setTextColor(getColor(R.color.white));
+        }else{
+            mConstraintLayout.setBackgroundColor(getColor(R.color.backgroud_app));
+            mSaveLoginCheckBox.setTextColor(getColor(R.color.black));
+            mChangeBackgroundView.setTextColor(getColor(R.color.black));
+        }
     }
 }
