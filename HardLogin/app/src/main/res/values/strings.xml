@@ -5,4 +5,6 @@
     <string name="login">Login</string>
     <string name="msg_login_success">Login realizado com sucesso.</string>
     <string name="msg_login_error">Erro ao realizar login.</string>
+    <string name="check_remember_login_data">Lembrar informações de login</string>
+    <string name="view_background_change">Alterar cor do fundo</string>
 </resources>
