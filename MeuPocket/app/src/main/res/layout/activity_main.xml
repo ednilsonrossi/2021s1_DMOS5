@@ -8,8 +8,18 @@
     tools:context=".view.MainActivity">
 
     <ListView
+        android:id="@+id/list_sites"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/list_sites" />
+        android:layout_height="match_parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_site"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/site_site"
+        android:src="@drawable/ic_add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

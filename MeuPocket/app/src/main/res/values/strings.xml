@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">MeuPocket</string>
+    <string name="site_title">Titulo do site</string>
+    <string name="site_url">Endereço do site</string>
+    <string name="save">Salvar</string>
+    <string name="site_site">Adicionar novo site</string>
+    <string name="success_message">Dados salvos</string>
 </resources>
