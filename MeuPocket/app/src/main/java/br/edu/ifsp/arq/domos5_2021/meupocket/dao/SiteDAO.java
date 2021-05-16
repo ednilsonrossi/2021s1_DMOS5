@@ -47,6 +47,7 @@ public class SiteDAO {
     }
 
     public Site find(String title){
+
         for(Site s : siteList){
             if(s.getTitle().equals(title)){
                 return s;
