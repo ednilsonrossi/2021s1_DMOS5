@@ -13,6 +13,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 
 import br.edu.ifsp.arq.domos5_2021.meupocket.R;
+import br.edu.ifsp.arq.domos5_2021.meupocket.adapter.ItemSiteAdapter;
 import br.edu.ifsp.arq.domos5_2021.meupocket.constantes.Constantes;
 import br.edu.ifsp.arq.domos5_2021.meupocket.controller.SiteController;
 import br.edu.ifsp.arq.domos5_2021.meupocket.dao.SiteDAO;
@@ -23,7 +24,8 @@ public class MainActivity extends AppCompatActivity {
     private List<Site> mSites;
     private ListView mListView;
     private FloatingActionButton mActionButton;
-    private ArrayAdapter<Site> mSiteArrayAdapter;
+    //private ArrayAdapter<Site> mSiteArrayAdapter;
+    private ItemSiteAdapter mItemSiteAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +33,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mSites = SiteController.allSites();
-        mSiteArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mSites);
+        //mSiteArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mSites);
+        mItemSiteAdapter = new ItemSiteAdapter(this, mSites);
 
         mListView = findViewById(R.id.list_sites);
-        mListView.setAdapter(mSiteArrayAdapter);
+        //mListView.setAdapter(mSiteArrayAdapter);
+        mListView.setAdapter(mItemSiteAdapter);
         mListView.setOnItemClickListener((adapterView, view, i, l) -> updateSite(i));
 
         mActionButton = findViewById(R.id.fab_add_site);
@@ -79,6 +83,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateAdapter(){
-        mSiteArrayAdapter.notifyDataSetChanged();
+        mItemSiteAdapter.notifyDataSetChanged();
     }
 }
