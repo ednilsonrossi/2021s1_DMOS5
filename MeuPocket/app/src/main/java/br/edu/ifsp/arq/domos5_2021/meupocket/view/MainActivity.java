@@ -2,6 +2,8 @@ package br.edu.ifsp.arq.domos5_2021.meupocket.view;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,7 +24,8 @@ import br.edu.ifsp.arq.domos5_2021.meupocket.model.Site;
 public class MainActivity extends AppCompatActivity {
 
     private List<Site> mSites;
-    private ListView mListView;
+    //private ListView mListView;
+    private RecyclerView mSitesRecyclerView;
     private FloatingActionButton mActionButton;
     //private ArrayAdapter<Site> mSiteArrayAdapter;
     private ItemSiteAdapter mItemSiteAdapter;
@@ -33,13 +36,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mSites = SiteController.allSites();
-        //mSiteArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mSites);
-        mItemSiteAdapter = new ItemSiteAdapter(this, mSites);
 
-        mListView = findViewById(R.id.list_sites);
-        //mListView.setAdapter(mSiteArrayAdapter);
-        mListView.setAdapter(mItemSiteAdapter);
-        mListView.setOnItemClickListener((adapterView, view, i, l) -> updateSite(i));
+        mItemSiteAdapter = new ItemSiteAdapter(this, mSites);
+        mItemSiteAdapter.setClickListener(position -> updateSite(position));
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        mSitesRecyclerView = findViewById(R.id.recycler_sites);
+        mSitesRecyclerView.setLayoutManager(layoutManager);
+        mSitesRecyclerView.setAdapter(mItemSiteAdapter);
 
         mActionButton = findViewById(R.id.fab_add_site);
         mActionButton.setOnClickListener(v -> newSite());
@@ -48,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case Constantes.REQUEST_CODE_NEW_SITE:
                     SiteController.addSite(
@@ -82,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, Constantes.REQUEST_CODE_UPDATE_SITE);
     }
 
-    private void updateAdapter(){
+    private void updateAdapter() {
         mItemSiteAdapter.notifyDataSetChanged();
     }
 }

@@ -7,8 +7,14 @@
     android:padding="8dp"
     tools:context=".view.MainActivity">
 
+    <!--
     <ListView
         android:id="@+id/list_sites"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_sites"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
