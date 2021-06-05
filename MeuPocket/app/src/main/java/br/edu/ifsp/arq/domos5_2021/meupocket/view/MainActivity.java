@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mSites = SiteController.allSites();
+        mSites = SiteController.allSites(this);
 
         mItemSiteAdapter = new ItemSiteAdapter(this, mSites);
         mItemSiteAdapter.setClickListener(position -> updateSite(position));
@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
             switch (requestCode) {
                 case Constantes.REQUEST_CODE_NEW_SITE:
                     SiteController.addSite(
+                            this,
                             data.getStringExtra(Constantes.KEY_TITLE),
                             data.getStringExtra(Constantes.KEY_URL)
                     );
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                     String o = data.getStringExtra(Constantes.KEY_OLD_TITLE);
                     String t = data.getStringExtra(Constantes.KEY_TITLE);
                     String u = data.getStringExtra(Constantes.KEY_URL);
-                    SiteController.updateSite(o, t, u);
+                    SiteController.updateSite(this, o, t, u);
                     break;
             }
             updateAdapter();
