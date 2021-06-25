@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MeusLivros</string>
+    <string name="author">Autor</string>
+    <string name="title">Titulo</string>
+    <string name="save">Salvar</string>
+    <string name="message_success">Salvo com sucesso</string>
+    <string name="message_erros">Erro ao salvar os dados</string>
+</resources>
