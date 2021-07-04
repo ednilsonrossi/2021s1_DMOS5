@@ -63,10 +63,10 @@ public class LivroDao {
         Cursor mCursor = null;
 
         String mColunas[] = new String[]{
+                LivroContract.LivroEntry._ID,
                 LivroContract.LivroEntry.COLUMN_TITLE,
                 LivroContract.LivroEntry.COLUMN_AUTHOR,
                 LivroContract.LivroEntry.COLUMN_BORROWED,
-                LivroContract.LivroEntry._ID,
                 LivroContract.LivroEntry.COLUMN_FRIEND
         };
         try {
@@ -83,10 +83,10 @@ public class LivroDao {
 
             while (mCursor.moveToNext()) {
                 mLivro = new Livro(
-                        mCursor.getInt(3),
-                        mCursor.getString(0),
+                        mCursor.getInt(0),
                         mCursor.getString(1),
-                        mCursor.getInt(2) == 1,
+                        mCursor.getString(2),
+                        mCursor.getInt(3) == 1,
                         amigoDao.recuperate(mCursor.getInt(4))
                 );
                 mLivros.add(mLivro);

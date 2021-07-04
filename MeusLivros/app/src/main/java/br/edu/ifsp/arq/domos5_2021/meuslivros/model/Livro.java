@@ -21,6 +21,7 @@ public class Livro {
         this.autor = autor;
         this.emprestado = emprestado;
         this.amigo = amigo;
+        this.id = id;
     }
 
     @Override

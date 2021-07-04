@@ -36,6 +36,7 @@ public class DetalhesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes);
 
+        id = -1;
         mTitleEditText = findViewById(R.id.edit_title);
         mAuthorEditText = findViewById(R.id.edit_author);
         mBorrowedCheckBox = findViewById(R.id.check_borrowed);
@@ -69,7 +70,7 @@ public class DetalhesActivity extends AppCompatActivity {
             mBorrowedCheckBox.setVisibility(View.VISIBLE);
             mUpdateButton.setVisibility(View.VISIBLE);
 
-            if(mBorrowedCheckBox.isChecked()) {
+            //if(mBorrowedCheckBox.isChecked()) {
                 mSpinner.setVisibility(View.VISIBLE);
                 mSpinner.setAdapter(AmigosController.getAmigosAdapter(this));
                 mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -83,7 +84,7 @@ public class DetalhesActivity extends AppCompatActivity {
                         amigo = null;
                     }
                 });
-            }
+            //}
         }
 
 
