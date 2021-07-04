@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
 
     private FloatingActionButton mAddActionButton;
+    private FloatingActionButton mAddFriendButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +28,10 @@ public class MainActivity extends AppCompatActivity {
 
         mRecyclerView = findViewById(R.id.list_livros);
         mAddActionButton = findViewById(R.id.fab_add_book);
+        mAddFriendButton = findViewById(R.id.fab_add_friend);
 
         mAddActionButton.setOnClickListener(v -> addLivro());
+        mAddFriendButton.setOnClickListener(v -> novoAmigo());
 
         mAdapter = LivroController.getLivrosAdapter(this, position -> openDetails(position));
 
@@ -49,6 +52,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void addLivro(){
         Intent intent = new Intent(this, DetalhesActivity.class);
+        startActivity(intent);
+    }
+
+    private void novoAmigo(){
+        Intent intent = new Intent(this, AmigoActivity.class);
         startActivity(intent);
     }
 }

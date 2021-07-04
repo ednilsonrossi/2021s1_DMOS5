@@ -16,9 +16,11 @@ public class LivroDao {
 
     private SQLiteHelper mHelper;
     private SQLiteDatabase mDatabase;
+    private AmigoDao amigoDao;
 
     public LivroDao(@Nullable Context context) {
         mHelper = new SQLiteHelper(context);
+        amigoDao = new AmigoDao(context);
     }
 
 
@@ -28,72 +30,92 @@ public class LivroDao {
         Atenção pois o nome das colunas deve ser sempre o mesmo.
     */
     public boolean insert(Livro livro){
-        ContentValues values = new ContentValues();
-        values.put(SQLiteHelper.ATTR_TITLE, livro.getTitulo());
-        values.put(SQLiteHelper.ATTR_AUTHOR, livro.getAutor());
+        long linhas;
 
-        mDatabase = mHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(LivroContract.LivroEntry.COLUMN_TITLE, livro.getTitulo());
+        values.put(LivroContract.LivroEntry.COLUMN_AUTHOR, livro.getAutor());
+
+        try {
+            mDatabase = mHelper.getWritableDatabase();
         /*
             O metodo insert do Database retorna o numero de linhas inseridas ou -1 caso
             ocorra algum erro.
          */
-        long linhas = mDatabase.insert(
-                SQLiteHelper.TABLE_NAME_BOOK,
-                null,
-                values
-        );
-        mDatabase.close();
+            linhas = mDatabase.insert(
+                    LivroContract.LivroEntry.TABLE_NAME,
+                    null,
+                    values
+            );
+            mDatabase.close();
+        }catch (Exception e){
+            linhas = -1;
+        }finally {
+            mDatabase.close();
+        }
         return ! (linhas == -1);
     }
 
     public List<Livro> recuperate(){
         Livro mLivro;
         List<Livro> mLivros = new ArrayList<>();
-        Cursor mCursor;
+
+        Cursor mCursor = null;
 
         String mColunas[] = new String[]{
-                SQLiteHelper.ATTR_TITLE,
-                SQLiteHelper.ATTR_AUTHOR,
-                SQLiteHelper.ATTR_BORROWED
+                LivroContract.LivroEntry.COLUMN_TITLE,
+                LivroContract.LivroEntry.COLUMN_AUTHOR,
+                LivroContract.LivroEntry.COLUMN_BORROWED,
+                LivroContract.LivroEntry._ID,
+                LivroContract.LivroEntry.COLUMN_FRIEND
         };
-
-        mDatabase = mHelper.getReadableDatabase();
-        mCursor = mDatabase.query(
-                SQLiteHelper.TABLE_NAME_BOOK,
-                mColunas,
-                null,
-                null,
-                null,
-                null,
-                SQLiteHelper.ATTR_TITLE
-        );
-
-        while (mCursor.moveToNext()){
-            mLivro = new Livro(
-                    mCursor.getString(0),
-                    mCursor.getString(1),
-                    mCursor.getInt(2) == 1
+        try {
+            mDatabase = mHelper.getReadableDatabase();
+            mCursor = mDatabase.query(
+                    LivroContract.LivroEntry.TABLE_NAME,
+                    mColunas,
+                    null,
+                    null,
+                    null,
+                    null,
+                    LivroContract.LivroEntry.COLUMN_TITLE
             );
-            mLivros.add(mLivro);
+
+            while (mCursor.moveToNext()) {
+                mLivro = new Livro(
+                        mCursor.getInt(3),
+                        mCursor.getString(0),
+                        mCursor.getString(1),
+                        mCursor.getInt(2) == 1,
+                        amigoDao.recuperate(mCursor.getInt(4))
+                );
+                mLivros.add(mLivro);
+            }
+        }catch (Exception e){
+            mLivros = null;
+        }finally {
+            mCursor.close();
+            mDatabase.close();
         }
 
-        mCursor.close();
-        mDatabase.close();
         return mLivros;
     }
 
     public boolean update(Livro livro){
         boolean deuCerto = true;
         ContentValues values = new ContentValues();
-        values.put(SQLiteHelper.ATTR_AUTHOR, livro.getAutor());
-        values.put(SQLiteHelper.ATTR_BORROWED, livro.isEmprestado()?1:0);
+        values.put(LivroContract.LivroEntry.COLUMN_AUTHOR, livro.getAutor());
+        values.put(LivroContract.LivroEntry.COLUMN_BORROWED, livro.isEmprestado()?1:0);
+        if(livro.getAmigo() != null) {
+            values.put(LivroContract.LivroEntry.COLUMN_FRIEND, livro.getAmigo().getId());
+        }
 
-        String where = SQLiteHelper.ATTR_TITLE + " = ?";
-        String whereArgs[] = {livro.getTitulo()};
+        String where = LivroContract.LivroEntry._ID + " = ?";
+        String whereArgs[] = {String.valueOf(livro.getId())};
 
         try{
             mDatabase = mHelper.getWritableDatabase();
-            mDatabase.update(SQLiteHelper.TABLE_NAME_BOOK, values, where, whereArgs);
+            mDatabase.update(LivroContract.LivroEntry.TABLE_NAME, values, where, whereArgs);
         }catch (Exception e){
             deuCerto = false;
         }finally {
