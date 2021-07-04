@@ -2,10 +2,10 @@ package br.edu.ifsp.arq.domos5_2021.meuslivros.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -17,7 +17,10 @@ public class DetalhesActivity extends AppCompatActivity {
 
     private EditText mTitleEditText;
     private EditText mAuthorEditText;
-    private Button mButton;
+    private CheckBox mBorrowedCheckBox;
+    private Button mSaveButton;
+    private Button mUpdateButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,9 +29,14 @@ public class DetalhesActivity extends AppCompatActivity {
 
         mTitleEditText = findViewById(R.id.edit_title);
         mAuthorEditText = findViewById(R.id.edit_author);
-        mButton = findViewById(R.id.button_save);
+        mBorrowedCheckBox = findViewById(R.id.check_borrowed);
+        mSaveButton = findViewById(R.id.button_save);
+        mUpdateButton = findViewById(R.id.button_upgrade);
 
-        mButton.setOnClickListener(v -> saveLivro());
+        mSaveButton.setOnClickListener(v -> saveLivro());
+        mUpdateButton.setOnClickListener(v -> updateLivro());
+
+
     }
 
     @Override
@@ -38,14 +46,26 @@ public class DetalhesActivity extends AppCompatActivity {
         if(bundle != null){
             mTitleEditText.setText(bundle.getString(Constants.KEY_TITLE));
             mAuthorEditText.setText(bundle.getString(Constants.KEY_AUTHOR));
-            mButton.setVisibility(View.GONE);
+            mBorrowedCheckBox.setChecked(bundle.getBoolean(Constants.KEY_BORROWED));
+            mSaveButton.setVisibility(View.GONE);
             mTitleEditText.setEnabled(false);
-            mAuthorEditText.setEnabled(false);
+            mBorrowedCheckBox.setVisibility(View.VISIBLE);
+            mUpdateButton.setVisibility(View.VISIBLE);
         }
     }
 
+
     private void saveLivro(){
         if(LivroController.salvarLivro(this, mTitleEditText.getText().toString(), mAuthorEditText.getText().toString())){
+            showToast(getString(R.string.message_success));
+        }else{
+            showToast(getString(R.string.message_erros));
+        }
+        finish();
+    }
+
+    private void updateLivro(){
+        if(LivroController.atualizarLivro(this, mTitleEditText.getText().toString(), mAuthorEditText.getText().toString(), mBorrowedCheckBox.isChecked())){
             showToast(getString(R.string.message_success));
         }else{
             showToast(getString(R.string.message_erros));

@@ -53,7 +53,8 @@ public class LivroDao {
 
         String mColunas[] = new String[]{
                 SQLiteHelper.ATTR_TITLE,
-                SQLiteHelper.ATTR_AUTHOR
+                SQLiteHelper.ATTR_AUTHOR,
+                SQLiteHelper.ATTR_BORROWED
         };
 
         mDatabase = mHelper.getReadableDatabase();
@@ -70,7 +71,8 @@ public class LivroDao {
         while (mCursor.moveToNext()){
             mLivro = new Livro(
                     mCursor.getString(0),
-                    mCursor.getString(1)
+                    mCursor.getString(1),
+                    mCursor.getInt(2) == 1
             );
             mLivros.add(mLivro);
         }
@@ -78,5 +80,25 @@ public class LivroDao {
         mCursor.close();
         mDatabase.close();
         return mLivros;
+    }
+
+    public boolean update(Livro livro){
+        boolean deuCerto = true;
+        ContentValues values = new ContentValues();
+        values.put(SQLiteHelper.ATTR_AUTHOR, livro.getAutor());
+        values.put(SQLiteHelper.ATTR_BORROWED, livro.isEmprestado()?1:0);
+
+        String where = SQLiteHelper.ATTR_TITLE + " = ?";
+        String whereArgs[] = {livro.getTitulo()};
+
+        try{
+            mDatabase = mHelper.getWritableDatabase();
+            mDatabase.update(SQLiteHelper.TABLE_NAME_BOOK, values, where, whereArgs);
+        }catch (Exception e){
+            deuCerto = false;
+        }finally {
+            mDatabase.close();
+        }
+        return deuCerto;
     }
 }

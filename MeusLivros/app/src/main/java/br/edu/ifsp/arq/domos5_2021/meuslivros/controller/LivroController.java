@@ -34,11 +34,17 @@ public class LivroController {
         return dao.insert(new Livro(title, author));
     }
 
+    public static boolean atualizarLivro(Context context, String title, String author, boolean borrowed){
+        LivroDao dao = new LivroDao(context);
+        return dao.update(new Livro(title, author, borrowed));
+    }
+
     public static void mostrarDetalhes(Context context, ItemLivrosAdapter adapter, int position){
         Livro livro = adapter.getDataSource().get(position);
         Bundle bundle = new Bundle();
         bundle.putString(Constants.KEY_TITLE, livro.getTitulo());
         bundle.putString(Constants.KEY_AUTHOR, livro.getAutor());
+        bundle.putBoolean(Constants.KEY_BORROWED, livro.isEmprestado());
         Intent intent = new Intent(context, DetalhesActivity.class);
         intent.putExtras(bundle);
         context.startActivity(intent);
