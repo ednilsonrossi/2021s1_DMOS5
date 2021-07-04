@@ -8,7 +8,9 @@ import java.util.List;
 
 import br.edu.ifsp.arq.domos5_2021.meuslivros.adapter.ItemLivrosAdapter;
 import br.edu.ifsp.arq.domos5_2021.meuslivros.constants.Constants;
+import br.edu.ifsp.arq.domos5_2021.meuslivros.dao.LivroContract;
 import br.edu.ifsp.arq.domos5_2021.meuslivros.dao.LivroDao;
+import br.edu.ifsp.arq.domos5_2021.meuslivros.model.Amigo;
 import br.edu.ifsp.arq.domos5_2021.meuslivros.model.Livro;
 import br.edu.ifsp.arq.domos5_2021.meuslivros.view.DetalhesActivity;
 import br.edu.ifsp.arq.domos5_2021.meuslivros.view.RecyclerItemClickListener;
@@ -34,11 +36,18 @@ public class LivroController {
         return dao.insert(new Livro(title, author));
     }
 
+    public static boolean atualizarLivro(Context context, int id, String title, String author, boolean borrowed, Amigo amigo){
+        LivroDao dao = new LivroDao(context);
+        return dao.update(new Livro(id, title, author, borrowed, amigo));
+    }
+
     public static void mostrarDetalhes(Context context, ItemLivrosAdapter adapter, int position){
         Livro livro = adapter.getDataSource().get(position);
         Bundle bundle = new Bundle();
-        bundle.putString(Constants.KEY_TITLE, livro.getTitulo());
-        bundle.putString(Constants.KEY_AUTHOR, livro.getAutor());
+        bundle.putString(LivroContract.LivroEntry.COLUMN_TITLE, livro.getTitulo());
+        bundle.putString(LivroContract.LivroEntry.COLUMN_AUTHOR, livro.getAutor());
+        bundle.putBoolean(LivroContract.LivroEntry.COLUMN_BORROWED, livro.isEmprestado());
+        bundle.putInt(LivroContract.LivroEntry._ID, livro.getId());
         Intent intent = new Intent(context, DetalhesActivity.class);
         intent.putExtras(bundle);
         context.startActivity(intent);

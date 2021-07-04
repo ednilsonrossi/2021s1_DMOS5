@@ -9,12 +9,7 @@ import androidx.annotation.Nullable;
 public class SQLiteHelper extends SQLiteOpenHelper {
     //Configuracoes gerais do banco de dados
     public static final String DATABASE_NAME = "livros.db";
-    public static final int DATABASE_VERSION = 1;
-
-    //Tabelas e colunas do banco de dados
-    public static final String TABLE_NAME_BOOK = "livros";
-    public static final String ATTR_TITLE = "titulo";
-    public static final String ATTR_AUTHOR = "autor";
+    public static final int DATABASE_VERSION = 3;
 
     /*
         Como o banco de dados esta vinculado ao aplicativo, e necessario acesso ao contexto do
@@ -24,7 +19,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-
     /*
         O método onCreate() é chamado apenas quando o aplicativo é instalado no dispositivo. Depois
         de instalado esse método não é mais invocado.
@@ -33,17 +27,48 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        //Definiçao do SQL que cria a tabela
-        String sql = "CREATE TABLE " + TABLE_NAME_BOOK + " (";
-        sql += ATTR_TITLE + " TEXT NOT NULL, ";
-        sql += ATTR_AUTHOR + " TEXT NOT NULL)";
-
         //Executa o comando sql
-        db.execSQL(sql);
+        db.execSQL(AmigoContract.createTable());
+        db.execSQL(LivroContract.createTable());
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        String sql;
+        switch (oldVersion){
+            case 1:
+                db.execSQL(LivroContract.alterTableToVersao2());
+            case 2:
+                //Criar table amigo
+                db.execSQL(AmigoContract.createTable());
 
+                //Renomeia tabela livros
+                sql = "ALTER TABLE " + LivroContract.LivroEntry.TABLE_NAME
+                        + " RENAME TO " + LivroContract.LivroEntry.TABLE_NAME_OLD;
+                db.execSQL(sql);
+
+                //Cria nova tabela livros com a chave primaria
+                db.execSQL(LivroContract.createTable());
+
+                //Insere todos os livros já cadastrados na nova tabela livros
+                sql = "INSERT INTO " + LivroContract.LivroEntry.TABLE_NAME + " ("
+                        + LivroContract.LivroEntry.COLUMN_TITLE + ", "
+                        + LivroContract.LivroEntry.COLUMN_AUTHOR + ", "
+                        + LivroContract.LivroEntry.COLUMN_BORROWED + ") "
+                        + " SELECT "
+                        + LivroContract.LivroEntry.COLUMN_TITLE + ", "
+                        + LivroContract.LivroEntry.COLUMN_AUTHOR + ", "
+                        + LivroContract.LivroEntry.COLUMN_BORROWED
+                        + " FROM " + LivroContract.LivroEntry.TABLE_NAME_OLD;
+                db.execSQL(sql);
+
+                //Apaga a tabela livros antiga
+                sql = "DROP TABLE " + LivroContract.LivroEntry.TABLE_NAME_OLD;
+                db.execSQL(sql);
+        }
     }
+
+
+
+
 }

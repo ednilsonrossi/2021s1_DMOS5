@@ -5,4 +5,7 @@
     <string name="save">Salvar</string>
     <string name="message_success">Salvo com sucesso</string>
     <string name="message_erros">Erro ao salvar os dados</string>
+    <string name="borrowed">Emprestado</string>
+    <string name="upgrade">Atualizar</string>
+    <string name="friend_name">Nome do amigo</string>
 </resources>
