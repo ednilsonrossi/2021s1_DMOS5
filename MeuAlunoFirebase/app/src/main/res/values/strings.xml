@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MeuAlunoFirebase</string>
+    <string name="hint_prontuario">Prontuário do aluno</string>
+    <string name="hint_nome">Nome do aluno</string>
+    <string name="hint_email">E-mail do aluno</string>
+    <string name="button_salvar">Salvar</string>
+</resources>

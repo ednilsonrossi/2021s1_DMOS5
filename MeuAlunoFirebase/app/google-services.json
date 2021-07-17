@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "732690204297",
+    "firebase_url": "https://alunodmo2020.firebaseio.com",
+    "project_id": "alunodmo2020",
+    "storage_bucket": "alunodmo2020.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:732690204297:android:9d2f48c8e8814255592858",
+        "android_client_info": {
+          "package_name": "br.edu.ednilsonrossi.meualunofirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "732690204297-akprjiq2e7qhg5ld6fdqmmsboa1uejo5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBZ6skKOJjEpw9WqycSkGHX9EMmW0MOQk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "732690204297-akprjiq2e7qhg5ld6fdqmmsboa1uejo5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
